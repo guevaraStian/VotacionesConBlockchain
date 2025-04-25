@@ -152,12 +152,16 @@ def uploader():
 
 
 ###############
-# Codigo nuevo de voto individual
+# Inicio Codigo nuevo de voto individual
 ##############
 
 @app.route("/realizar_votacion")
 def realizar_votacion():
-    return render_template('realizar_votacion.html')
+    client = MongoClient('localhost', port=27017, username='', password='')
+    db = client['VBlockchain']
+    col = db['Bloques_opciones']
+    lista_opciones_creadas = col.find()
+    return render_template('realizar_votacion.html', lista_opciones_creadas = lista_opciones_creadas )
 
 
 
@@ -241,7 +245,106 @@ def subirinfovoto():
 
 
 ###############
-# Codigo nuevo  de voto individual
+# Fin Codigo nuevo  de voto individual
+##############
+
+
+
+###############
+# Inicio Codigo nuevo  de cada opcion en los votos
+##############
+
+@app.route("/crear_opcion")
+def crear_opcion():
+    return render_template('crear_opcion.html')
+
+
+
+@app.route("/crear_opcion_voto", methods=['POST'])
+def crear_opcion_voto():
+    if request.method == 'POST':
+        #Se crean las variables y se guarda lo que viene del primer formulario
+        cedula_candidato = request.form['cedula_candidato']
+        nombre_candidato = request.form['nombre_candidato']
+        partido_politico = request.form['partido_politico']
+        propuestas = request.form['propuestas']
+        descripcion = request.form['descripcion']
+
+        #Conexion a la base de datos "Blockchain" y seleccion de la coleccion "Bloques"
+        client = MongoClient('localhost', port=27017, username='', password='')
+        db = client['VBlockchain']
+        col = db['Bloques_opciones']
+
+        #Se guarda en la variable "colvacia" si la coleccion "Bloques" esta vacia
+        #colvacia = (col.count() == 0)
+        colvacia = col.find_one({"NumeroBloque": "1"})
+        
+        #Si "colvacia" es "None" el HashAnterior es "Genesis" y el NumeroBloque es 1
+        if(colvacia == None):
+            HashAnterior = "Genesis"
+            NumeroBloque = 1
+            NumeroBloque = str(NumeroBloque)
+            #Se encripta toda la informacion con sha256 anexando el hash
+            encri = hashlib.sha256(NumeroBloque.encode()+cedula_candidato.encode()+nombre_candidato.encode()
+                                   +partido_politico.encode()+propuestas.encode()+descripcion.encode()+HashAnterior.encode())
+            HashActual = encri.hexdigest()
+            #Se insertan los valores en la base de datos
+            col.insert_one({'NumeroBloque': NumeroBloque, 'cedula_candidato': cedula_candidato, 'nombre_candidato': nombre_candidato,
+                        'partido_politico': partido_politico, 'propuestas': propuestas, 'descripcion': descripcion, 'HashAnterior': HashAnterior, 'HashActual': HashActual 
+            })
+        
+        #Si "colvacia" es DIFERENTE de "None" el HashAnterior es varia y el NumeroBloque es depende de cuantos se hayan creado
+        if (colvacia != None):
+            #Se guarda en la variable "bloquecodificado" el ultimo bloque que se inserto
+            bloquecodificado = col.find().sort('NumeroBloque', -1).limit(1)
+            #se recorren los items dentro de ese ultimo bloque 
+            #cada item se guarda en la variable "bloqueanterior"
+            for item in bloquecodificado :
+                bloqueanterior = item
+            #Dentro de la lista que se guardo en "bloqueanterior" se selecciona el campo "NumeroBloque"
+            numbloqant = bloqueanterior['NumeroBloque']
+            #Dentro de la lista que se guardo en "bloqueanterior" se selecciona el campo "HashActual"
+            hashbloqant = bloqueanterior['HashActual']
+            numbloqant= int(numbloqant)
+            NumeroBloque = numbloqant + 1
+            HashAnterior = hashbloqant
+            #Se convierten las variables en string para poderla guardar en la base de datos
+            NumeroBloque = str(NumeroBloque)
+            HashAnterior = str(HashAnterior)
+            #Se encripta la informacion
+            encri = hashlib.sha256(NumeroBloque.encode()+cedula_candidato.encode()+nombre_candidato.encode()
+                                   +partido_politico.encode()+propuestas.encode()+descripcion.encode()+HashAnterior.encode())
+            HashActual = encri.hexdigest()
+            #Se insertan los valores en la base de datos
+            col.insert_one({'NumeroBloque': NumeroBloque, 'cedula_candidato': cedula_candidato, 'nombre_candidato': nombre_candidato,
+                        'partido_politico': partido_politico, 'propuestas': propuestas, 'descripcion': descripcion, 'HashAnterior': HashAnterior, 'HashActual': HashActual 
+            })
+        #En formulario se retorna e imprime en pantalla la siguiente informacion
+        return render_template('crear_opcion.html',NumeroBloque= NumeroBloque, cedula_candidato=cedula_candidato ,nombre_candidato=nombre_candidato , partido_politico= partido_politico ,
+                               propuestas= propuestas , descripcion= descripcion,HashAnterior=HashAnterior , HashActual=HashActual )
+
+
+@app.route("/mostrar_opciones" , methods=['POST'])
+#Luego de que activa el metodo 'POST' con la ruta "/mostrar" corre la siguiente funcion
+def mostrar_opciones():
+    if request.method == 'POST':
+        #Se conecta a la base de datos "Blockchain" y la coleccion "Bloques"
+        client = MongoClient('localhost', port=27017, username='', password='')
+        db = client['VBlockchain']
+        col = db['Bloques_opciones']
+        #Se consulta los bloques creados y se guarda en la variable "listabloques"
+        lista_opciones = col.find()
+        
+    #Se publican las listas en el template verbloques.html
+    return render_template('/ver_opciones.html', lista_opciones=lista_opciones)
+
+
+
+
+
+
+###############
+# Fin Codigo nuevo  de cada opcion en los votos
 ##############
 
 # Iniciar el servidor

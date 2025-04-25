@@ -51,33 +51,27 @@
     </nav>
 
     <br />
-    <!-- <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
-      <div class="card-header">Bloque</div>
-      <div class="card-body">
-        <h5 class="card-title">Secondary card title</h5>
-        <p class="card-text">{{block}}</p>
-      </div>
-    </div> -->
-
 
 <!-- codigo para mostrar todos los bloques -->
-    {% block result %}
+{% block result %}
 
 	<div class="container" id="test">
             <tbody id="body">
-                {% for i in listabloques%}
+                {% for i in lista_opciones%}
                 <div class="card bg-secondary mb-3" >
                   <div class="card-body">
                 <tr>
                     <td> <th> NumeroBloque = </th> {{ i["NumeroBloque"] }}</td>
                     <br>
-                    <td> <th>nombre_1 =</th> {{ i["nombre_1"] }}</td>
+                    <td> <th>cedula_candidato =</th> {{ i["cedula_candidato"] }}</td>
                     <br>
-                    <td> <th>votacion_1 = </th>{{ i["votacion_1"] }}</td>
+                    <td> <th>nombre_candidato = </th>{{ i["nombre_candidato"] }}</td>
                     <br>
-                    <td> <th>nombre_2 = </th> {{ i["nombre_2"] }}</td>
+                    <td> <th>partido_politico = </th> {{ i["partido_politico"] }}</td>
                     <br>
-                    <td> <th>votacion_2 = </th>{{ i["votacion_2"] }}</td>
+                    <td> <th>propuestas = </th>{{ i["propuestas"] }}</td>
+                    <br>
+                    <td> <th>descripcion = </th>{{ i["descripcion"] }}</td>
                     <br>
                     <td> <th>HashAnterior = </th> {{ i["HashAnterior"] }}</td>
                     <br>
@@ -87,7 +81,6 @@
             </div>
                 {% endfor %}
     </div>
-
 {%endblock%}
 
 

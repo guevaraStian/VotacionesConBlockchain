@@ -30,6 +30,11 @@
           <input type="submit" value="Ver votos individual" class="navbar-brand text-black"/>
         </form>
 
+        <a class="navbar-brand text-white" href="/crear_opcion">Crear opcion</a>
+        <form action="/mostrar_opciones" method="POST" enctype="multipart/form-data">
+          <input type="submit" value="Ver opciones" class="navbar-brand text-black"/>
+        </form>
+
 <!-- Codigo nuevo de voto individual  -->
           <a class="navbar-brand text-white" href="{{url_for('logout')}}">Salir</a>
           <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px" >

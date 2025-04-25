@@ -54,7 +54,7 @@
     <!-- El siguiente codigo es el formulario para ingresar la informacion de las votaciones -->
       <h1>Votacion electronica con Blockchain</h1>
       <h2>Por favor ingrese la informacion de la votacion : </h2><br>
-      <form action="/crear_voto" method="POST" enctype="multipart/form-data">
+      <form action="/crear_opcion_voto" method="POST" enctype="multipart/form-data">
         <table class="table table-responsive table-bordered">
           <thead class="bg-danger">
             <tr>
@@ -64,36 +64,24 @@
           </thead>
           <tbody>
             <tr>
-                <th scope="row" class="bg-secondary">Cedula del votante:</th>
-                <td scope="row" class="bg-secondary"><input type="text" name="numero_cedula" class="form-control" /></td>
+                <th scope="row" class="bg-secondary">Cedula del candidato :</th>
+                <td scope="row" class="bg-secondary"><input type="text" name="cedula_candidato" class="form-control" /></td>
             </tr>
             <tr>
-              <th scope="row" class="bg-secondary">Nombre del votante:</th>
-              <td scope="row" class="bg-secondary"><input type="text" name="nombre_votante" class="form-control" /></td>
+              <th scope="row" class="bg-secondary">Nombre del candidato :</th>
+              <td scope="row" class="bg-secondary"><input type="text" name="nombre_candidato" class="form-control" /></td>
             </tr>
             <tr>
-              <th scope="row" class="bg-secondary">Eleccion pais:</th>
-              <td scope="row" class="bg-secondary">
-                <!-- INICIO  PARTE DE EL SELECT -->
-                <select id="voto_pai" name="voto_pais">
-                {% block result %}
-                  {% for i in lista_opciones_creadas%}
-                    <option value="{{ i['nombre_candidato'] }}">{{ i['nombre_candidato'] }}</option>
-
-                    
-                  {% endfor %}
-
-                {%endblock%}
-              </select>
-  <!-- FIN  PARTE DE EL SELECT -->
-              </td>
-            <tr>
-              <th scope="row" class="bg-secondary">Eleccion departamento:</th>
-              <td scope="row" class="bg-secondary"><input type="text" name="voto_departamento" class="form-control" /></td>
+              <th scope="row" class="bg-secondary">Partido politico :</th>
+              <td scope="row" class="bg-secondary"><input type="text" name="partido_politico" class="form-control" /></td>
             </tr>
             <tr>
-              <th scope="row" class="bg-secondary">Eleccion municipio:</th>
-              <td scope="row" class="bg-secondary"><input type="text" name="voto_municipio" class="form-control" /></td>
+              <th scope="row" class="bg-secondary">Propuestas :</th>
+              <td scope="row" class="bg-secondary"><input type="text" name="propuestas" class="form-control" /></td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-secondary">Descripcion de opcion :</th>
+              <td scope="row" class="bg-secondary"><input type="text" name="descripcion" class="form-control" /></td>
             </tr>
             <tr>
               <th scope="row" class="bg-danger"><input type="submit" value="Subir" class="btn btn-secondary"/></th>
@@ -115,26 +103,26 @@
         </thead>
         <tbody>
             <tr>
-                <th scope="row" class="bg-secondary">numero_cedula</th>
-                <td scope="row" class="bg-secondary">{{numero_cedula}}</td>
+                <th scope="row" class="bg-secondary">cedula_candidato</th>
+                <td scope="row" class="bg-secondary">{{cedula_candidato}}</td>
             </tr>
           <tr>
-            <th scope="row" class="bg-secondary">nombre_votante</th>
-            <td scope="row" class="bg-secondary">{{nombre_votante}}</td>       
+            <th scope="row" class="bg-secondary">nombre_candidato</th>
+            <td scope="row" class="bg-secondary">{{nombre_candidato}}</td>       
           </tr>
           <tr>
-            <th scope="row" class="bg-secondary">voto_pais</th>
-            <td scope="row" class="bg-secondary">{{voto_pais}}</td>
+            <th scope="row" class="bg-secondary">partido_politico</th>
+            <td scope="row" class="bg-secondary">{{partido_politico}}</td>
 
           </tr>
           <tr>
-            <th scope="row" class="bg-secondary">voto_departamento</th>
-            <td scope="row" class="bg-secondary">{{voto_departamento}}</td>
+            <th scope="row" class="bg-secondary">propuestas</th>
+            <td scope="row" class="bg-secondary">{{propuestas}}</td>
 
           </tr>
           <tr>
-            <th scope="row" class="bg-secondary">voto_municipio</th>
-            <td scope="row" class="bg-secondary">{{voto_municipio}}</td>
+            <th scope="row" class="bg-secondary">descripcion</th>
+            <td scope="row" class="bg-secondary">{{descripcion}}</td>
 
           </tr>
           <tr>
@@ -150,8 +138,8 @@
         </tbody>
       </table>
           <!-- En este boton podemos ir a ver todos los bloques creados  -->
-      <form action="/mostrar_voto_individual" method="POST" enctype="multipart/form-data">
-        <input type="submit" value="Ver blosques de voto individual" class="btn btn-secondary"/>
+      <form action="/mostrar_opciones" method="POST" enctype="multipart/form-data">
+        <input type="submit" value="Ver blosques de opciones" class="btn btn-secondary"/>
       </form>
 
     </div>
