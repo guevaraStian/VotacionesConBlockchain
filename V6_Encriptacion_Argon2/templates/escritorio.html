@@ -1,0 +1,44 @@
+
+{% if session["usuario"] == "prueba@mail.com" %}
+           
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escritorio</title>
+      <!-- Se importa bootstrap -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    
+</head>
+
+<body class="p-3 mb-2 bg-dark text-white">
+
+  {% include 'barra_inicio.html' %}
+            {% block content %}{% endblock %}
+  
+    
+
+
+
+            <div class="is-one-third is-offset-one-third">
+                Hola <strong>{{session["usuario"]}}</strong>
+                <p>A esta página solo se puede acceder si el usuario ha iniciado sesión</p>
+                <a href="{{url_for('logout')}}">Salir</a>
+            </div>
+            
+            
+      
+</body>
+
+</html>
+
+
+
+{% else %}  
+           <a href="{{ url_for('main.login') }}">Login</a>
+{% endif %}
